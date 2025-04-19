@@ -1,0 +1,105 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Social Media Addiction Predictor</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', sans-serif;
+            background-color: #f4f6f8;
+            margin: 0;
+            padding: 20px;
+        }
+        .container {
+            background: white;
+            max-width: 600px;
+            margin: auto;
+            padding: 30px 40px;
+            border-radius: 10px;
+            box-shadow: 0 8px 16px rgba(0,0,0,0.1);
+        }
+        h2 {
+            text-align: center;
+            color: #333;
+        }
+        label {
+            font-weight: bold;
+        }
+        input, select, button {
+            width: 100%;
+            padding: 12px;
+            margin-top: 8px;
+            margin-bottom: 20px;
+            border-radius: 6px;
+            border: 1px solid #ccc;
+            box-sizing: border-box;
+        }
+        button {
+            background-color: #2e86de;
+            color: white;
+            font-weight: bold;
+            cursor: pointer;
+            transition: 0.3s;
+        }
+        button:hover {
+            background-color: #1e6bb8;
+        }
+        .result {
+            background-color: #eaf7ef;
+            padding: 15px;
+            border-left: 5px solid #2ecc71;
+            margin-top: 20px;
+            border-radius: 6px;
+            font-size: 1.1em;
+        }
+        .warning {
+            background-color: #fff4e5;
+            border-left: 5px solid #f39c12;
+        }
+        .danger {
+            background-color: #fdecea;
+            border-left: 5px solid #e74c3c;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h2>🔥 Social Media Addiction Predictor</h2>
+        <form method="POST">
+            <label>Platform:</label>
+            <select name="platform" required>
+                {% for option in ['Instagram', 'Facebook', 'YouTube', 'TikTok'] %}
+                    <option value="{{ option }}" {% if input_data.platform == option %}selected{% endif %}>{{ option }}</option>
+                {% endfor %}
+            </select>
+
+            <label>Total Time Spent (in minutes):</label>
+            <input type="number" name="total_time" required value="{{ input_data.total_time or '' }}">
+
+            <label>Number of Sessions:</label>
+            <input type="number" name="sessions" required value="{{ input_data.sessions or '' }}">
+
+            <label>Engagement (1-10):</label>
+            <input type="number" name="engagement" min="1" max="10" step="0.1" required value="{{ input_data.engagement or '' }}">
+
+            <label>Scroll Rate (1-10):</label>
+            <input type="number" name="scroll_rate" min="1" max="10" step="0.1" required value="{{ input_data.scroll_rate or '' }}">
+
+            <button type="submit">Predict</button>
+        </form>
+
+        {% if prediction is not none %}
+            <div class="result
+                {% if prediction <= 3 %}
+                    {% elif prediction <= 6 %} warning
+                    {% else %} danger
+                {% endif %}
+            ">
+                <strong>Predicted Addiction Level: {{ prediction }}</strong><br>
+                {{ feedback }}
+            </div>
+        {% endif %}
+    </div>
+</body>
+</html>
